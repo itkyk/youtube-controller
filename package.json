@@ -1,6 +1,6 @@
 {
   "name": "@itkyk/youtube-controller",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/itkyk/youtube-controller.git"
   },
-  "keywords": [],
+  "keywords": ["youtube", "iframe API", "typescript", "jsvascript"],
   "author": "",
   "license": "ISC",
   "bugs": {
