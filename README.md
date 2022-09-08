@@ -22,6 +22,11 @@ player.onYouTubeIframeAPIReady().then(() => {
 });
 ```
 
+## Initial Methods
+1. onYouTubeIframeAPIReady
+   - This function is Promise.
+   - when this function return `Promise`, it mean is `onReady` too.
+
 ## Methods that Player has
 1. playVideo
    - Arguments: none.
@@ -171,6 +176,9 @@ player.onYouTubeIframeAPIReady().then(() => {
 38. destroy
     - Arguments: none
     - Return: none
+39. getPlayer
+    - Argument: none
+    - Return: Native player Object
 
 ## Types
 - <h3 id="speedRateType">speedRateType</h3>

@@ -14,13 +14,15 @@ type qualityType = "highres" | "hd1080" | "hd720" | "large" | "medium" | "small"
 class YoutubeController {
   private player: null | any;
   private readonly videoId: string;
-  private readonly target: HTMLElement;
+  private readonly target: HTMLElement | Element;
   private readonly playerVars: Record<string, any>;
-  constructor(_videoId: string, _el: HTMLElement, playerVars: Record<string, any>) {
+  private lastYT: any;
+  constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>) {
     this.player = null;
     this.videoId = _videoId
     this.target = _el
     this.playerVars = playerVars;
+    this.lastYT = null;
   }
 
   private setPlayerReady = () => {
@@ -34,16 +36,26 @@ class YoutubeController {
     })
   }
 
-  onYouTubeIframeAPIReady  = () => {
-    let loadFlag = false;
+  getPlayer = () => this.player
+
+  private sleep = (delay: number) => {
     return new Promise(resolve => {
-      do {
-        if (window.YT && !loadFlag) {
+      setTimeout(() => {
+        resolve(null)
+      }, delay)
+    })
+  }
+
+  onYouTubeIframeAPIReady  = () => {
+    return new Promise(resolve => {
+      const interval = setInterval(() => {
+        if (window.YT && !this.player) {
           this.setPlayerReady();
-          loadFlag = true;
+        } else if (window.YT && this.player.mute) {
+          resolve(null);
+          clearInterval(interval);
         }
-      } while (!window.YT);
-      resolve(null);
+      }, 100)
     })
   }
   stopVideo = () => {
@@ -182,7 +194,7 @@ class YoutubeController {
     return this.player.getPlaylistIndex();
   }
 
-  addEventListener = (event:string, listener:()=>void) => {
+  addEventListener = (event:string, listener:(event: any)=>void) => {
     this.player.addEventListener(event, listener);
   }
 

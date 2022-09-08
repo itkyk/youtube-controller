@@ -10,16 +10,25 @@ class YoutubeController {
                 });
             });
         };
-        this.onYouTubeIframeAPIReady = () => {
-            let loadFlag = false;
+        this.getPlayer = () => this.player;
+        this.sleep = (delay) => {
             return new Promise(resolve => {
-                do {
-                    if (window.YT && !loadFlag) {
+                setTimeout(() => {
+                    resolve(null);
+                }, delay);
+            });
+        };
+        this.onYouTubeIframeAPIReady = () => {
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    if (window.YT && !this.player) {
                         this.setPlayerReady();
-                        loadFlag = true;
                     }
-                } while (!window.YT);
-                resolve(null);
+                    else if (window.YT && this.player.mute) {
+                        resolve(null);
+                        clearInterval(interval);
+                    }
+                }, 100);
             });
         };
         this.stopVideo = () => {
@@ -140,6 +149,7 @@ class YoutubeController {
         this.videoId = _videoId;
         this.target = _el;
         this.playerVars = playerVars;
+        this.lastYT = null;
     }
 }
 YoutubeController.initYoutubeApi = () => {

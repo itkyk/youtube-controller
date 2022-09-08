@@ -7,8 +7,11 @@ declare class YoutubeController {
     private readonly videoId;
     private readonly target;
     private readonly playerVars;
-    constructor(_videoId: string, _el: HTMLElement, playerVars: Record<string, any>);
+    private lastYT;
+    constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>);
     private setPlayerReady;
+    getPlayer: () => any;
+    private sleep;
     onYouTubeIframeAPIReady: () => Promise<unknown>;
     stopVideo: () => void;
     playVideo: () => void;
@@ -66,7 +69,7 @@ declare class YoutubeController {
     getVideoEmbedCode: () => string;
     getPlaylist: () => Array<string>;
     getPlaylistIndex: () => number;
-    addEventListener: (event: string, listener: () => void) => void;
+    addEventListener: (event: string, listener: (event: any) => void) => void;
     removeEventListener: (event: string, listener: () => void) => void;
     getIframe: () => HTMLIFrameElement;
     destroy: () => void;
