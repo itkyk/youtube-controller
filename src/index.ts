@@ -54,9 +54,11 @@ class YoutubeController {
         if (window.YT && !this.createPlayerFlag) {
           this.createPlayerFlag = true;
           this.setPlayerReady();
-        } else if (window.YT && this.player.mute) {
-          resolve(null);
-          clearInterval(interval);
+        } else if (window.YT && this.player) {
+          if (this.player.mute) {
+            resolve(null);
+            clearInterval(interval);
+          }
         }
       }, 100)
     })

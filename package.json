@@ -1,20 +1,30 @@
 {
   "name": "@itkyk/youtube-controller",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "start": "tsc -w",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/itkyk/youtube-controller.git"
   },
-  "keywords": ["youtube", "iframe API", "typescript", "jsvascript"],
+  "keywords": [
+    "youtube",
+    "iframe API",
+    "typescript",
+    "javascript"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/itkyk/youtube-controller/issues"
   },
-  "homepage": "https://github.com/itkyk/youtube-controller#readme"
+  "homepage": "https://github.com/itkyk/youtube-controller#readme",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
 }
