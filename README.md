@@ -10,16 +10,18 @@ $ npm i @itkyk/youtube-controller
 ```typescript
 import YoutubeController from "@itkyk/youtube-controller";
 
-// set YT scriopt
-YoutubeController.initYoutubeApi()
-
+const initi = async() => {
 // start Youtube
-const target = document.querySelector("target"); /* <- insert player in this selector*/
-const playerVars = {} /* setting playerVars */
-const player = new YoutubeController("videoId", target, playerVars);
-player.onYouTubeIframeAPIReady().then(() => {
-  // any video action
-});
+  const target = document.querySelector("target"); /* <- insert player in this selector*/
+  const playerVars = {} /* setting playerVars */
+  const player = new YoutubeController("videoId", target, playerVars);
+  await player.onYouTubeIframeAPIReady();
+  /* ↓ Can use player ↓ */
+  player.cueVideoById({
+    videoId: "foobar"
+  })
+  player.playVideo();
+}
 ```
 
 ## Initial Methods
@@ -189,3 +191,8 @@ player.onYouTubeIframeAPIReady().then(() => {
   - -1 | 0 | 1 | 2 | 3 | 5
 - <h3 id="qualityType">qualityType</h3>
   - "highres" | "hd1080" | "hd720" | "large" | "medium" | "small" 
+
+## Change Log
+- update v2.0.5
+  - Simplified initial setup.  
+    Also, the `onYouTubeIframeAPIReady` method has been modified to run correctly.

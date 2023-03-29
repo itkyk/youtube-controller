@@ -8,11 +8,10 @@ declare class YoutubeController {
     private readonly target;
     private readonly playerVars;
     private lastYT;
-    private createPlayerFlag;
+    private isReady;
     constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>);
     private setPlayerReady;
     getPlayer: () => any;
-    private sleep;
     onYouTubeIframeAPIReady: () => Promise<unknown>;
     stopVideo: () => void;
     playVideo: () => void;
@@ -74,7 +73,7 @@ declare class YoutubeController {
     removeEventListener: (event: string, listener: () => void) => void;
     getIframe: () => HTMLIFrameElement;
     destroy: () => void;
-    static initYoutubeApi: () => void;
+    private initYoutubeApi;
 }
 export default YoutubeController;
 //# sourceMappingURL=index.d.ts.map

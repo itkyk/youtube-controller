@@ -1,5 +1,10 @@
 interface Window {
   YT: any;
+  ytController: {
+    init: boolean;
+    ready: boolean;
+  };
+  onYouTubeIframeAPIReady: (init?:string) => void;
 }
 declare var window: Window
 
@@ -11,58 +16,70 @@ type playerStateType = -1 | 0 | 1 | 2 | 3 | 5;
 
 type qualityType = "highres" | "hd1080" | "hd720" | "large" | "medium" | "small" ;
 
+let ytPlayerIsReady = false;
+
+if ("ytController" in window === false) {
+  window.ytController = {
+    init: false,
+    ready: false
+  };
+}
+
+if ("onYouTubeIframeAPIReady" in window === false) {
+  window.onYouTubeIframeAPIReady = (init?: string) => {
+    if (init === "init") return;
+    ytPlayerIsReady = true;
+  }
+}
+
+const onReady = () => {
+  window.ytController.ready = true;
+}
+
 class YoutubeController {
   private player: null | any;
   private readonly videoId: string;
   private readonly target: HTMLElement | Element;
   private readonly playerVars: Record<string, any>;
   private lastYT: any;
-  private createPlayerFlag: boolean;
+  private isReady: boolean;
   constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>) {
+    this.isReady = false;
+    this.initYoutubeApi();
     this.player = null;
     this.videoId = _videoId
     this.target = _el
     this.playerVars = playerVars;
     this.lastYT = null;
-    this.createPlayerFlag = false;
   }
 
   private setPlayerReady = () => {
-    window.YT.ready(() => {
-      this.player = new window.YT.Player(this.target, {
-        videoId: this.videoId,
-        playerVars: {
-          ...this.playerVars
-        }
-      });
-    })
+    this.player = new window.YT.Player(this.target, {
+      videoId: this.videoId,
+      playerVars: {
+        ...this.playerVars
+      },
+      events: {
+        onReady: onReady
+      }
+    });
   }
 
   getPlayer = () => this.player
 
-  private sleep = (delay: number) => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(null)
-      }, delay)
-    })
-  }
-
   onYouTubeIframeAPIReady  = () => {
     return new Promise(resolve => {
       const interval = setInterval(() => {
-        if (window.YT && !this.createPlayerFlag) {
-          this.createPlayerFlag = true;
+        if (ytPlayerIsReady && !this.player) {
           this.setPlayerReady();
-        } else if (window.YT && this.player) {
-          if (this.player.mute) {
-            resolve(null);
-            clearInterval(interval);
-          }
+        } else if (ytPlayerIsReady && window.ytController.ready) {
+          resolve(this.player);
+          clearInterval(interval);
         }
-      }, 100)
+      }, 100);
     })
   }
+
   stopVideo = () => {
     this.player.stopVideo();
   }
@@ -215,12 +232,15 @@ class YoutubeController {
     this.player.destroy();
   }
 
-  static initYoutubeApi = () => {
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    if (firstScriptTag.parentNode) {
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  private initYoutubeApi = () => {
+    if (!window.ytController.init) {
+      window.ytController.init = true;
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      if (firstScriptTag.parentNode) {
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      }
     }
   }
 }
