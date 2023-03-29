@@ -11,11 +11,9 @@ if ("onYouTubeIframeAPIReady" in window === false) {
 class YoutubeController {
     constructor(_videoId, _el, playerVars) {
         this.setPlayerReady = () => {
-            window.YT.ready(() => {
-                this.player = new window.YT.Player(this.target, {
-                    videoId: this.videoId,
-                    playerVars: Object.assign({}, this.playerVars)
-                });
+            this.player = new window.YT.Player(this.target, {
+                videoId: this.videoId,
+                playerVars: Object.assign({}, this.playerVars)
             });
         };
         this.getPlayer = () => this.player;
@@ -26,7 +24,7 @@ class YoutubeController {
                         this.setPlayerReady();
                     }
                     else if (ytPlayerIsReady && this.player) {
-                        resolve(null);
+                        resolve(this.player);
                         clearInterval(interval);
                     }
                 }, 100);
