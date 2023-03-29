@@ -8,6 +8,7 @@ declare class YoutubeController {
     private readonly target;
     private readonly playerVars;
     private lastYT;
+    private isReady;
     constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>);
     private setPlayerReady;
     getPlayer: () => any;

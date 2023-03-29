@@ -2,6 +2,7 @@ interface Window {
   YT: any;
   ytController: {
     init: boolean;
+    ready: boolean;
   };
   onYouTubeIframeAPIReady: (init?:string) => void;
 }
@@ -17,11 +18,22 @@ type qualityType = "highres" | "hd1080" | "hd720" | "large" | "medium" | "small"
 
 let ytPlayerIsReady = false;
 
+if ("ytController" in window === false) {
+  window.ytController = {
+    init: false,
+    ready: false
+  };
+}
+
 if ("onYouTubeIframeAPIReady" in window === false) {
   window.onYouTubeIframeAPIReady = (init?: string) => {
     if (init === "init") return;
     ytPlayerIsReady = true;
   }
+}
+
+const onReady = () => {
+  window.ytController.ready = true;
 }
 
 class YoutubeController {
@@ -30,12 +42,9 @@ class YoutubeController {
   private readonly target: HTMLElement | Element;
   private readonly playerVars: Record<string, any>;
   private lastYT: any;
+  private isReady: boolean;
   constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>) {
-    if ("ytController" in window === false) {
-      window.ytController = {
-        init: false
-      }
-    }
+    this.isReady = false;
     this.initYoutubeApi();
     this.player = null;
     this.videoId = _videoId
@@ -49,6 +58,9 @@ class YoutubeController {
       videoId: this.videoId,
       playerVars: {
         ...this.playerVars
+      },
+      events: {
+        onReady: onReady
       }
     });
   }
@@ -60,7 +72,7 @@ class YoutubeController {
       const interval = setInterval(() => {
         if (ytPlayerIsReady && !this.player) {
           this.setPlayerReady();
-        } else if (ytPlayerIsReady && this.player) {
+        } else if (ytPlayerIsReady && window.ytController.ready) {
           resolve(this.player);
           clearInterval(interval);
         }
