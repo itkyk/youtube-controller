@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let ytPlayerIsReady = false;
-const onYouTubeIframeAPIReady = (init) => {
-    if (init === "init")
-        return;
-    ytPlayerIsReady = true;
-};
-onYouTubeIframeAPIReady("init");
+if ("onYouTubeIframeAPIReady" in window === false) {
+    window.onYouTubeIframeAPIReady = (init) => {
+        if (init === "init")
+            return;
+        ytPlayerIsReady = true;
+    };
+}
 class YoutubeController {
     constructor(_videoId, _el, playerVars) {
         this.setPlayerReady = () => {

@@ -2,7 +2,8 @@ interface Window {
   YT: any;
   ytController: {
     init: boolean;
-  }
+  };
+  onYouTubeIframeAPIReady: (init?:string) => void;
 }
 declare var window: Window
 
@@ -16,12 +17,12 @@ type qualityType = "highres" | "hd1080" | "hd720" | "large" | "medium" | "small"
 
 let ytPlayerIsReady = false;
 
-const onYouTubeIframeAPIReady = (init?: string) => {
-  if (init === "init") return;
-  ytPlayerIsReady = true;
+if ("onYouTubeIframeAPIReady" in window === false) {
+  window.onYouTubeIframeAPIReady = (init?: string) => {
+    if (init === "init") return;
+    ytPlayerIsReady = true;
+  }
 }
-
-onYouTubeIframeAPIReady("init");
 
 class YoutubeController {
   private player: null | any;
