@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "type": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "./LICENSE"
   ],
   "scripts": {
     "start": "tsc -w",
