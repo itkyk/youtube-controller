@@ -3,6 +3,10 @@
   "version": "2.0.5",
   "description": "",
   "main": "dist/index.js",
+  "type": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "tsc -w",
     "build": "tsc",
