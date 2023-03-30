@@ -1,30 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let ytPlayerIsReady = false;
-if ("ytController" in window === false) {
-    window.ytController = {
-        init: false,
-        ready: false
-    };
-}
-if ("onYouTubeIframeAPIReady" in window === false) {
-    window.onYouTubeIframeAPIReady = (init) => {
-        if (init === "init")
-            return;
-        ytPlayerIsReady = true;
-    };
-}
-const onReady = () => {
-    window.ytController.ready = true;
-};
 class YoutubeController {
     constructor(_videoId, _el, playerVars) {
+        this.ytSetting = () => {
+            if ("ytController" in window === false) {
+                window.ytController = {
+                    init: false,
+                    ready: false
+                };
+            }
+            if ("onYouTubeIframeAPIReady" in window === false) {
+                window.onYouTubeIframeAPIReady = (init) => {
+                    if (init === "init")
+                        return;
+                    ytPlayerIsReady = true;
+                };
+            }
+        };
+        this.onReady = () => {
+            window.ytController.ready = true;
+        };
         this.setPlayerReady = () => {
             this.player = new window.YT.Player(this.target, {
                 videoId: this.videoId,
                 playerVars: Object.assign({}, this.playerVars),
                 events: {
-                    onReady: onReady
+                    onReady: this.onReady
                 }
             });
         };
@@ -167,6 +169,7 @@ class YoutubeController {
                 }
             }
         };
+        this.ytSetting();
         this.isReady = false;
         this.initYoutubeApi();
         this.player = null;
