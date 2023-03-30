@@ -193,6 +193,8 @@ const initi = async() => {
   - "highres" | "hd1080" | "hd720" | "large" | "medium" | "small" 
 
 ## Change Log
-- update v2.0.5
+- ### update v2.0.6
+  - Fixed a bug in React that prevented it from working.
+- ### update v2.0.5
   - Simplified initial setup.  
     Also, the `onYouTubeIframeAPIReady` method has been modified to run correctly.
