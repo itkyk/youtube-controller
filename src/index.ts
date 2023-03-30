@@ -18,23 +18,7 @@ type qualityType = "highres" | "hd1080" | "hd720" | "large" | "medium" | "small"
 
 let ytPlayerIsReady = false;
 
-if ("ytController" in window === false) {
-  window.ytController = {
-    init: false,
-    ready: false
-  };
-}
 
-if ("onYouTubeIframeAPIReady" in window === false) {
-  window.onYouTubeIframeAPIReady = (init?: string) => {
-    if (init === "init") return;
-    ytPlayerIsReady = true;
-  }
-}
-
-const onReady = () => {
-  window.ytController.ready = true;
-}
 
 class YoutubeController {
   private player: null | any;
@@ -44,6 +28,7 @@ class YoutubeController {
   private lastYT: any;
   private isReady: boolean;
   constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>) {
+    this.ytSetting();
     this.isReady = false;
     this.initYoutubeApi();
     this.player = null;
@@ -53,6 +38,26 @@ class YoutubeController {
     this.lastYT = null;
   }
 
+  private ytSetting = () => {
+    if ("ytController" in window === false) {
+      window.ytController = {
+        init: false,
+        ready: false
+      };
+    }
+
+    if ("onYouTubeIframeAPIReady" in window === false) {
+      window.onYouTubeIframeAPIReady = (init?: string) => {
+        if (init === "init") return;
+        ytPlayerIsReady = true;
+      }
+    }
+  }
+
+  private onReady = () => {
+    window.ytController.ready = true;
+  }
+
   private setPlayerReady = () => {
     this.player = new window.YT.Player(this.target, {
       videoId: this.videoId,
@@ -60,7 +65,7 @@ class YoutubeController {
         ...this.playerVars
       },
       events: {
-        onReady: onReady
+        onReady: this.onReady
       }
     });
   }
