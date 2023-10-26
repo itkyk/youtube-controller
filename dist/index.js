@@ -9,8 +9,6 @@ class YoutubeController {
                     init: false,
                     ready: false
                 };
-            }
-            if ("onYouTubeIframeAPIReady" in window === false) {
                 window.onYouTubeIframeAPIReady = (init) => {
                     if (init === "init")
                         return;

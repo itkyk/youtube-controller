@@ -44,9 +44,6 @@ class YoutubeController {
         init: false,
         ready: false
       };
-    }
-
-    if ("onYouTubeIframeAPIReady" in window === false) {
       window.onYouTubeIframeAPIReady = (init?: string) => {
         if (init === "init") return;
         ytPlayerIsReady = true;
