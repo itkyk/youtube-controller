@@ -1,6 +1,6 @@
 {
   "name": "@itkyk/youtube-controller",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Module for easily incorporating iframe API.",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
