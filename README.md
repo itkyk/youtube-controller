@@ -32,167 +32,157 @@ const initi = async() => {
 ## Methods that Player has
 1. playVideo
    - Arguments: none.
-   - Return: none;
-2. stopVideo
+   - Return: void;
+1. stopVideo
     - Arguments: none.
-    - Return: none;
-3. pauseVideo
+    - Return: void;
+1. pauseVideo
     - Arguments: none.
-    - Return: none;
-4. loadVideoById
+    - Return: void;
+1. loadVideoById
     - Arguments: 
       - Object
         - videoId:string
         - startSeconds?:number
-        - suggestedQuality?:string
-    - Return: none;
-5. loadVideoByUrl
+        - suggestedQuality?:`YT.SuggestedVideoQuality`
+    - Return: void;
+1. loadVideoByUrl
     - Arguments: 
       - Object
         - mediaContentUrl:string
         - startSeconds?:number
         - endSeconds?:number
-        - suggestedQuality?:string
-    - Return: none;
-6. cueVideoById
+        - suggestedQuality?:`YT.SuggestedVideoQuality`
+    - Return: void;
+1. cueVideoById
     - Arguments: 
       - Object
         - videoId: string
         - startSeconds?:number
         - endSeconds?:number
-        - suggestedQuality?:string
-    - Return: none;
-7. cueVideoByUrl
+        - suggestedQuality?:`YT.SuggestedVideoQuality`
+    - Return: void;
+1. cueVideoByUrl
     - Arguments: 
       - Object
         - mediaContentUrl:string
         - startSeconds?:number
         - endSeconds?:number
-        - suggestedQuality?:string
-    - Return: none;
-8. seekTo
+        - suggestedQuality?:`YT.SuggestedVideoQuality`
+    - Return: void;
+1. seekTo
    - Arguments:
      - seconds: number,
-     - allowSeekAhead:boolean -> default: true
-   - Return: none
-9. clearVideo
-   - Arguments: none
-   - Return none
-10. nextVideo
+     - allowSeekAhead:boolean
+   - Return: void
+1. nextVideo
     - Arguments: none
     - Return none
-11. previousVideo
+1. previousVideo
     - Arguments: none
-    - Return: none
-12. playVideoAt
+    - Return: void
+playVideoAt
     - Arguments:
       - index: number
     - Return none
-13. mute
+1. mute
     - Arguments: none
-    - Return: none
-14. unMute
+    - Return: void
+1. unMute
     - Arguments: none
-    - Return: none
-15. isMuted
+    - Return: void
+1. isMuted
     - Arguments: none
     - Return: boolean
-16. setVolume
+1. setVolume
     - Arguments: 
-      - volume: [numFromZeroToHundred](#numFromZeroToHundred)
-    - Return: none
-17. getVolume
+      - volume: number
+    - Return: void
+1. getVolume
     - Arguments: none
-    - Return: 0 ~ 100
-18. setSize
+    - Return: number
+1. setSize
     - Arguments:
       - Object
         - width: number
         - height: number
-    - Return: none
-19. getPlaybackRate
+    - Return: void
+1. getPlaybackRate
     - Arguments: none
-    - Return [speedRateType](#speedRateType)
-20. setPlaybackRate
+    - Return number
+1. setPlaybackRate
     - Arguments:
       - suggestedRate: number
-    - Return: none
-21. getAvailablePlaybackRates
+    - Return: void
+1. getAvailablePlaybackRates
     - Arguments: none
     - Return: Array<number>
-22. setLoop
+1. setLoop
     - Arguments:
       - loopPlaylists: boolean
-    - Return: none
-23. setShuffle
+    - Return: void
+1. setShuffle
     - Arguments:
       - shufflePlaylist: boolean
-    - Return: none
-24. getVideoLoadedFraction
+    - Return: void
+1. getVideoLoadedFraction
     - Arguments: none
     - Return: number
-25. getPlayerState
+1. getPlayerState
     - Arguments: none
-    - Return: [playerStateType](#playerStateType)
-26. getCurrentTime
+    - Return: `YT.PlayerState`
+1. getCurrentTime
     - Arguments: none
     - Return: number
-27. getPlaybackQuality
+1. getPlaybackQuality
     - Arguments: none
-    - Return: [qualityType](#qualityType) | undefined
-28. setPlaybackQuality
+    - Return: `YT.SuggestedVideoQuality`
+1. setPlaybackQuality
     - Arguments: 
-      - suggestedQuality: [qualityType](#qualityType) | "default"
-    - Return: none
-29. getAvailableQualityLevels
+      - suggestedQuality:`YT.SuggestedVideoQuality`
+    - Return: void
+1. getAvailableQualityLevels
     - Arguments: none
-    - Return: Array<[qualityType](#qualityType)>
-30. getDuration
+    - Return: Array<`YT.SuggestedVideoQuality`>
+1. getDuration
     - Arguments: none
     - Return: number
-31. getVideoUrl
+1. getVideoUrl
     - Arguments: none
     - Return: string
-32. getVideoEmbedCode
+1. getVideoEmbedCode
     - Arguments: none
     - Return: string
-33. getPlaylist
+1. getPlaylist
     - Arguments: none
     - Return: Array<string>
-34. getPlaylistIndex
+1. getPlaylistIndex
     - Arguments: none
     - Return: number
-35. addEventListener
+1. addEventListener
     - Arguments: 
-      - event: string
-      - listener: function
-    - Return: none
-36. removeEventListener
+      - event: keyof `YT.PlayerEvent`
+      - listener: (event: `YT.PlayerEvent`)=>void
+    - Return: void
+1. removeEventListener
     - Arguments:
-        - event: string
-        - listener: function
-    - Return: none
-37. getIframe
+        - event: keyof `YT.PlayerEvent`
+        - listener: (event: `YT.PlayerEvent`)=>void
+    - Return: void
+1. getIframe
     - Arguments: none
     - Return: HTMLIFrameElement
-38. destroy
+1. destroy
     - Arguments: none
-    - Return: none
+    - Return: void
 39. getPlayer
     - Argument: none
-    - Return: Native player Object
-
-## Types
-- <h3 id="speedRateType">speedRateType</h3>
-  - 0.25 | 0.5 | 1 | 1.5 | 2
-- <h3 id="numFromZeroToHundred">numFromZeroToHundred</h3>
-  - Integer from 1~100
-- <h3 id="playerStateType">playerStateType</h3>
-  - -1 | 0 | 1 | 2 | 3 | 5
-- <h3 id="qualityType">qualityType</h3>
-  - "highres" | "hd1080" | "hd720" | "large" | "medium" | "small" 
+    - Return: `YT.Player`
 
 ## Change Log
+- ### update v2.1.0
+  - Change Types to `@types/youtube`
+  - Change option from `playerVars` to `YT.Options`
 - ### update v2.0.6
   - Fixed a bug in React that prevented it from working.
 - ### update v2.0.5

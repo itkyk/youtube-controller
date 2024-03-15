@@ -1,3 +1,6 @@
+import deepmerge from "deepmerge";
+import {isPlainObject} from "is-plain-object";
+
 interface Window {
   YT: any;
   ytController: {
@@ -8,34 +11,21 @@ interface Window {
 }
 declare var window: Window
 
-type numFromZeroToHundred = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 57 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68  | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99| 100;
-
-type speedRateType = 0.25 | 0.5 | 1 | 1.5 | 2;
-
-type playerStateType = -1 | 0 | 1 | 2 | 3 | 5;
-
-type qualityType = "highres" | "hd1080" | "hd720" | "large" | "medium" | "small" ;
-
 let ytPlayerIsReady = false;
 
 
 
 class YoutubeController {
-  private player: null | any;
+  private player: YT.Player | undefined;
   private readonly videoId: string;
   private readonly target: HTMLElement | Element;
-  private readonly playerVars: Record<string, any>;
-  private lastYT: any;
-  private isReady: boolean;
-  constructor(_videoId: string, _el: HTMLElement | Element, playerVars: Record<string, any>) {
+  private readonly options: YT.PlayerOptions;
+  constructor(_videoId: string, _el: HTMLElement | Element, options: YT.PlayerOptions) {
     this.ytSetting();
-    this.isReady = false;
     this.initYoutubeApi();
-    this.player = null;
     this.videoId = _videoId
     this.target = _el
-    this.playerVars = playerVars;
-    this.lastYT = null;
+    this.options = options;
   }
 
   private ytSetting = () => {
@@ -59,18 +49,20 @@ class YoutubeController {
   }
 
   private setPlayerReady = () => {
-    this.player = new window.YT.Player(this.target, {
-      videoId: this.videoId,
-      playerVars: {
-        ...this.playerVars
+    const opts = deepmerge({
+        videoId: this.videoId,
+        events: {
+          onReady: this.onReady
+        }
       },
-      events: {
-        onReady: this.onReady
-      }
-    });
+      this.options,
+      {
+          isMergeableObject: isPlainObject
+        }
+    );
+    this.player = new window.YT.Player(this.target, opts);
   }
 
-  getPlayer = () => this.player
 
   onYouTubeIframeAPIReady  = () => {
     return new Promise(resolve => {
@@ -85,157 +77,156 @@ class YoutubeController {
     })
   }
 
-  stopVideo = () => {
-    this.player.stopVideo();
-  }
 
   playVideo = () => {
-    this.player.playVideo();
+    this.player!.playVideo();
+  }
+
+  stopVideo = () => {
+    this.player!.stopVideo();
   }
 
   pauseVideo = () => {
-    this.player.pauseVideo();
+    this.player!.pauseVideo();
   }
 
-  loadVideoById = (args: {videoId:string, startSeconds?:number, suggestedQuality?:string}) => {
-    this.player.loadVideoById(args)
+  loadVideoById = (args: {videoId:string, startSeconds?:number, suggestedQuality?: YT.SuggestedVideoQuality}) => {
+    this.player!.loadVideoById(args.videoId, args.startSeconds, args.suggestedQuality);
   }
 
-  loadVideoByUrl = (args: {mediaContentUrl:string, startSeconds?:number, endSeconds?:number, suggestedQuality?:string}) => {
-    this.player.loadVideoByUrl(args)
+  loadVideoByUrl = (args: {mediaContentUrl: string, startSeconds?: number, suggestedQuality?: YT.SuggestedVideoQuality}) => {
+    this.player!.loadVideoByUrl(args.mediaContentUrl, args.startSeconds, args.suggestedQuality)
   }
 
-  cueVideoById = (args: {videoId: string, startSeconds?:number, endSeconds?:number, suggestedQuality?:string}) => {
-    this.player.cueVideoById(args);
+  cueVideoById = (args: {videoId: string, startSeconds?: number, suggestedQuality?: YT.SuggestedVideoQuality}) => {
+    this.player!.cueVideoById(args.videoId, args.startSeconds, args.suggestedQuality);
   }
 
-  cueVideoByUrl = (args:{mediaContentUrl:string, startSeconds?:number, endSeconds?:number, suggestedQuality?:string}) => {
-    this.player.cueVideoByUrl(args)
+  cueVideoByUrl = (args:{mediaContentUrl: string, startSeconds?: number, suggestedQuality?: YT.SuggestedVideoQuality}) => {
+    this.player!.cueVideoByUrl(args.mediaContentUrl, args.startSeconds, args.suggestedQuality);
   }
 
-  seekTo = (seconds:number, allowSeekAhead:boolean = true) => {
-    this.player.seekTo(seconds, allowSeekAhead);
-  }
-
-  clearVideo = () => {
-    this.player.clearVideo();
+  seekTo = (seconds: number, allowSeekAhead: boolean) => {
+    this.player!.seekTo(seconds, allowSeekAhead);
   }
 
   nextVideo = () => {
-    this.player.nextVideo();
+    this.player!.nextVideo();
   }
 
   previousVideo = () => {
-    this.player.previousVideo();
+    this.player!.previousVideo();
   }
 
   playVideoAt = (index: number) => {
-    this.player.playVideoAt(index);
+    this.player!.playVideoAt(index);
   }
 
   mute = () => {
-    this.player.mute();
+    this.player!.mute();
   }
 
   unMute = () => {
-    this.player.unMute();
+    this.player!.unMute();
   }
 
-  isMuted = (): boolean => {
-    return this.player.isMuted();
+  isMuted = () => {
+    return this.player!.isMuted();
   }
 
-  setVolume = (volume: numFromZeroToHundred) => {
-    this.player.setVolume(volume);
+  setVolume = (volume: number) => {
+    this.player!.setVolume(volume);
   }
 
-  getVolume = (): numFromZeroToHundred => {
-    return this.player.getVolume();
+  getVolume = () => {
+    return this.player!.getVolume();
   }
 
   setSize = (size: {width: number, height: number}) => {
-    this.player.setSize(size.width, size.height);
+    this.player!.setSize(size.width, size.height);
   }
 
-  getPlaybackRate = ():speedRateType => {
-    return this.player.getPlaybackRate()
+  getPlaybackRate = () => {
+    return this.player!.getPlaybackRate()
   }
 
   setPlaybackRate = (suggestedRate:number) => {
-    this.player.setPlaybackRate(suggestedRate);
+    this.player!.setPlaybackRate(suggestedRate);
   }
 
-  getAvailablePlaybackRates = (): Array<number> => {
-    return this.player.getAvailablePlaybackRates();
+  getAvailablePlaybackRates = () => {
+    return this.player!.getAvailablePlaybackRates();
   }
 
   setLoop = (loopPlaylists:boolean) => {
-    this.player.setLoop(loopPlaylists);
+    this.player!.setLoop(loopPlaylists);
   }
 
   setShuffle = (shufflePlaylist:boolean) => {
-    this.player.setShuffle(shufflePlaylist);
+    this.player!.setShuffle(shufflePlaylist);
   }
 
-  getVideoLoadedFraction = ():number => {
-    return this.player.getVideoLoadedFraction();
+  getVideoLoadedFraction = () => {
+    return this.player!.getVideoLoadedFraction();
   }
 
-  getPlayerState = ():playerStateType => {
-    return this.player.getPlayerState();
+  getPlayerState = () => {
+    return this.player!.getPlayerState();
   }
 
-  getCurrentTime = ():number => {
-    return this.player.getCurrentTime();
+  getCurrentTime = () => {
+    return this.player!.getCurrentTime();
   }
 
-  getPlaybackQuality = ():qualityType | undefined => {
-    return this.player.getPlaybackQuality();
+  getPlaybackQuality = () => {
+    return this.player!.getPlaybackQuality();
   }
 
-  setPlaybackQuality = (suggestedQuality: qualityType | "default") => {
-    this.player.setPlaybackQuality(suggestedQuality)
+  setPlaybackQuality = (suggestedQuality: YT.SuggestedVideoQuality) => {
+    this.player!.setPlaybackQuality(suggestedQuality)
   }
 
-  getAvailableQualityLevels = ():Array<qualityType> => {
-    return this.player.getAvailableQualityLevels();
+  getAvailableQualityLevels = () => {
+    return this.player!.getAvailableQualityLevels();
   }
 
-  getDuration = ():number => {
-    return this.player.getDuration();
+  getDuration = () => {
+    return this.player!.getDuration();
   }
 
-  getVideoUrl = ():string => {
-    return this.player.getVideoUrl();
+  getVideoUrl = () => {
+    return this.player!.getVideoUrl();
   }
 
-  getVideoEmbedCode = ():string => {
-    return this.player.getVideoEmbedCode();
+  getVideoEmbedCode = () => {
+    return this.player!.getVideoEmbedCode();
   }
 
-  getPlaylist = ():Array<string> => {
-    return this.player.getPlaylist();
+  getPlaylist = () => {
+    return this.player!.getPlaylist();
   }
 
-  getPlaylistIndex = ():number => {
-    return this.player.getPlaylistIndex();
+  getPlaylistIndex = () => {
+    return this.player!.getPlaylistIndex();
   }
 
-  addEventListener = (event:string, listener:(event: any)=>void) => {
-    this.player.addEventListener(event, listener);
+  addEventListener = <TEvent extends YT.PlayerEvent>(event:keyof YT.Events, listener:(event: TEvent)=>void) => {
+    this.player!.addEventListener(event, listener);
   }
 
-  removeEventListener = (event: string, listener:()=>void) => {
-    this.player.removeEventListener(event, listener);
+  removeEventListener = <TEvent extends YT.PlayerEvent>(event: keyof YT.Events, listener:(event: TEvent)=>void) => {
+    this.player!.removeEventListener(event, listener);
   }
 
-  getIframe = ():HTMLIFrameElement => {
-    return this.player.getIframe();
+  getIframe = () => {
+    return this.player!.getIframe();
   }
 
   destroy = () => {
-    this.player.destroy();
+    this.player!.destroy();
   }
+
+  getPlayer = () => this.player
 
   private initYoutubeApi = () => {
     if (!window.ytController.init) {

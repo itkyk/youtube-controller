@@ -1,16 +1,16 @@
 {
   "name": "@itkyk/youtube-controller",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "",
   "main": "dist/index.js",
-  "type": "./dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "./LICENSE"
   ],
   "scripts": {
     "start": "tsc -w",
-    "build": "tsc",
+    "build": "tsc --emitDeclarationOnly && node -r esbuild-register ./build/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,6 +30,15 @@
   },
   "homepage": "https://github.com/itkyk/youtube-controller#readme",
   "devDependencies": {
+    "@types/node": "^20.11.27",
+    "esbuild": "^0.20.2",
+    "esbuild-node-externals": "^1.13.0",
+    "esbuild-register": "^3.5.0",
     "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@types/youtube": "^0.0.50",
+    "deepmerge": "^4.3.1",
+    "is-plain-object": "^5.0.0"
   }
 }
