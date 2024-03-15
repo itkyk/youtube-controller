@@ -175,14 +175,16 @@ playVideoAt
 1. destroy
     - Arguments: none
     - Return: void
-39. getPlayer
+1. getPlayer
     - Argument: none
     - Return: `YT.Player`
 
 ## Change Log
-- ### update v2.1.0
+- ### update v2.1.1
   - Change Types to `@types/youtube`
   - Change option from `playerVars` to `YT.Options`
+- ### update v2.0.7
+  - Fixed overwrite condition of `onYouTubeIframeAPIReady`
 - ### update v2.0.6
   - Fixed a bug in React that prevented it from working.
 - ### update v2.0.5
