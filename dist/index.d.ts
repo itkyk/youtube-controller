@@ -4,7 +4,7 @@ declare class YoutubeController {
     private readonly videoId;
     private readonly target;
     private readonly options;
-    constructor(_videoId: string, _el: HTMLElement | Element, options: YT.PlayerOptions);
+    constructor(_videoId: string, _el: HTMLElement | Element, options: Omit<YT.PlayerOptions, "videoId">);
     private ytSetting;
     private onReady;
     private setPlayerReady;

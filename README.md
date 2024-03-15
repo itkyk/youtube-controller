@@ -13,8 +13,10 @@ import YoutubeController from "@itkyk/youtube-controller";
 const initi = async() => {
 // start Youtube
   const target = document.querySelector("target"); /* <- insert player in this selector*/
-  const playerVars = {} /* setting playerVars */
-  const player = new YoutubeController("videoId", target, playerVars);
+  const options = {
+      playerVars: {}
+  } /* setting YT.Options */
+  const player = new YoutubeController("videoId", target, options);
   await player.onYouTubeIframeAPIReady();
   /* ↓ Can use player ↓ */
   player.cueVideoById({

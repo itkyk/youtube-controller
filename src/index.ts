@@ -19,8 +19,8 @@ class YoutubeController {
   private player: YT.Player | undefined;
   private readonly videoId: string;
   private readonly target: HTMLElement | Element;
-  private readonly options: YT.PlayerOptions;
-  constructor(_videoId: string, _el: HTMLElement | Element, options: YT.PlayerOptions) {
+  private readonly options: Omit<YT.PlayerOptions, "videoId">;
+  constructor(_videoId: string, _el: HTMLElement | Element, options: Omit<YT.PlayerOptions, "videoId">) {
     this.ytSetting();
     this.initYoutubeApi();
     this.videoId = _videoId
